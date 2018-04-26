@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lwb.mapper.ProductMapper" >
+  <resultMap id="baseMap" type="com.lwb.model.Product" >
+    <id column="id" property="id" />
+    <result column="product_name" property="productName" />
+    <result column="catgelory" property="catgelory" />
+    <result column="yprice" property="yprice" />
+    <result column="nprice" property="nprice" />
+    <result column="images" property="images" />
+    <result column="seller_num" property="sellerNum" />
+    <result column="custorm_id" property="custormId" />
+    <result column="status" property="status" />
+    <result column="descrpt" property="descrpt" />
+    <result column="data" property="data" />
+    <result column="notice" property="notice" />
+    <result column="area_code" property="areaCode" />
+    <result column="end_time" property="endTime" />
+    <result column="create_time" property="createTime" />
+  </resultMap>
+
+  <sql id="columns" >
+    id, product_name, catgelory, yprice, nprice, images, seller_num, custorm_id, create_time, status,data,area_code,end_time
+  </sql>
+
+  <sql id="columns_detail" >
+    id, product_name, catgelory, yprice, nprice, images, seller_num, custorm_id, create_time, status,descrpt,notice,data,area_code,end_time
+  </sql>
+
+  <select id="get" resultMap="baseMap" parameterType="int" >
+    select 
+    <include refid="columns" /> 
+    from tv_product
+    where id = #{id}
+  </select>
+  
+  <delete id="deleteById" parameterType="java.lang.Integer" >
+    delete from tv_product
+    where id = #{id}
+  </delete>
+  
+  <insert id="add" parameterType="com.lwb.model.Product" >
+    insert into tv_product
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="productName != null" >
+        product_name,
+      </if>
+      <if test="catgelory > 0" >
+        catgelory,
+      </if>
+      <if test="yprice > 0" >
+        yprice,
+      </if>
+      <if test="nprice > 0" >
+        nprice,
+      </if>
+      <if test="images != null" >
+        images,
+      </if>
+      <if test="sellerNum > 0" >
+        seller_num,
+      </if>
+      <if test="custormId > 0" >
+        custorm_id,
+      </if>
+      <if test="createTime > 0" >
+        create_time,
+      </if>
+      <if test="status > 0" >
+        status,
+      </if>
+      <if test="notice != null" >
+        notice,
+      </if>
+      <if test="descrpt != null" >
+        descrpt,
+      </if>
+      <if test="data != null" >
+        data,
+      </if>
+      <if test="areaCode != null" >
+        area_code,
+      </if>
+      <if test="createTime != null" >
+        end_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="productName != null" >
+        #{productName},
+      </if>
+      <if test="catgelory != null" >
+        #{catgelory},
+      </if>
+      <if test="yprice != null" >
+        #{yprice},
+      </if>
+      <if test="nprice != null" >
+        #{nprice},
+      </if>
+      <if test="images != null" >
+        #{images},
+      </if>
+      <if test="sellerNum != null" >
+        #{sellerNum},
+      </if>
+      <if test="custormId != null" >
+        #{custormId},
+      </if>
+      <if test="createTime != null" >
+        #{createTime},
+      </if>
+      <if test="status != null" >
+        #{status},
+      </if>
+      <if test="notice != null" >
+        #{notice},
+      </if>
+      <if test="descrpt != null" >
+        #{descrpt},
+      </if>
+      <if test="data != null" >areaCode
+        #{data},
+      </if>
+      <if test="areaCode != null" >
+        #{areaCode},
+      </if>
+      <if test="createTime != null" >
+        #{createTime},
+      </if>
+    </trim>
+  </insert>
+  
+  <sql id="where_caulce" >
+ 	<where> 
+	    <if test="userId != null">
+	         custorm_id = #{userId}
+	    </if> 
+	    <if test="status >= 0">
+	        AND status = #{status}
+	    </if>
+	    <if test="catgelory >0">
+	        AND catgelory = #{catgelory}
+	    </if>
+  	</where>
+  </sql>
+  
+  <select id="count" parameterType="map" resultType="int" >
+    select count(*) from tv_product
+    <if test="_parameter != null" >
+      <include refid="where_caulce" />
+    </if>
+  </select>
+  
+  <select id="getList" parameterType="map" resultMap="baseMap">
+  	select <include refid="columns" /> 
+  	from tv_product 
+  	<include refid="where_caulce" /> 
+  	order by create_time desc LIMIT #{start},#{end}
+  </select>
+
+   <update id="setStatus" parameterType="map">
+     update tv_product set status=#{status} where id = #{id}
+   </update>
+   
+   <update id="setCustorm" parameterType="map">
+     update tv_product set custorm_id=#{userId} where id = #{id}
+   </update>
+
+  <update id="update" parameterType="com.lwb.model.Product" >
+    update tv_product
+    <set >
+      <if test="productName != null" >
+        product_name = #{productName},
+      </if>
+      <if test="catgelory > 0" >
+        catgelory = #{catgelory},
+      </if>
+      <if test="yprice > 0" >
+        yprice = #{yprice},
+      </if>
+      <if test="nprice > 0" >
+        nprice = #{nprice},
+      </if>
+      <if test="images != null" >
+        images = #{images},
+      </if>
+      <if test="sellerNum > 0" >
+        seller_num = #{sellerNum},
+      </if>
+      <if test="custormId > 0" >
+        custorm_id = #{custormId},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime},
+      </if>
+      <if test="notice != null" >
+        notice = #{notice},
+      </if>
+      <if test="descrpt != null" >
+        descrpt = #{descrpt},
+      </if>
+      <if test="data != null" >
+        data = #{data},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+ 
+</mapper>

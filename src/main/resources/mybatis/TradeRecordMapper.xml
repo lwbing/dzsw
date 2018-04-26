@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lwb.mapper.TradeRecordMapper" >
+  <resultMap id="baseMap" type="com.lwb.model.TradeRecord" >
+    <id column="record_id" property="recordId" jdbcType="VARCHAR" />
+    <result column="order_code" property="orderCode" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="trancen_id" property="trancenId" jdbcType="VARCHAR" />
+    <result column="cash" property="cash" jdbcType="REAL" />
+    <result column="trade_type" property="tradeType" jdbcType="INTEGER" />
+    <result column="returnInfo" property="returninfo" jdbcType="LONGVARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="BIGINT" />
+  </resultMap>
+
+  <sql id="columns" >
+    record_id, order_code, create_time, user_id, trancen_id, cash, trade_type
+  </sql>
+
+  <select id="get" resultMap="baseMap" parameterType="string" >
+    select 
+    <include refid="columns" />
+    from tv_traderecord
+    where record_id = #{recordId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteById" parameterType="string" >
+    delete from tv_traderecord
+    where record_id = #{recordId,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="add" parameterType="com.lwb.model.TradeRecord" >
+    insert into tv_traderecord (record_id, order_code, create_time, 
+      user_id, trancen_id, cash, 
+      trade_type, returnInfo)
+    values (#{recordId}, #{orderCode,jdbcType=VARCHAR}, #{createTime,jdbcType=BIGINT}, 
+      #{userId,jdbcType=INTEGER}, #{trancenId,jdbcType=VARCHAR}, #{cash,jdbcType=REAL}, 
+      #{tradeType,jdbcType=INTEGER}, #{returninfo,jdbcType=LONGVARCHAR})
+  </insert>
+  
+   <sql id="where_caulce" >
+ 	<where> 
+ 		<if test="_parameter.containsKey('userId')">  
+	        	AND user_id = #{userId}
+	    </if>
+
+		<if test="_parameter.containsKey('status')">  
+	        	AND status = #{status}
+	    </if>
+		<if test="_parameter.containsKey('custormId')">  
+	        	AND custorm_id = #{custormId}
+	    </if>
+	 </where>
+  </sql>
+  
+  <select id="count" parameterType="map" resultType="java.lang.Integer" >
+    select count(*) from tv_traderecord
+    <if test="_parameter != null" >
+      <include refid="where_caulce" />
+    </if>
+  </select>
+  
+  <select id="getList" parameterType="map" resultType="java.lang.Integer" >
+    select <include refid="columns" /> 
+    from tv_traderecord
+    <if test="_parameter != null" >
+      <include refid="where_caulce" />
+    </if>
+    order by create_time desc LIMIT #{start,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+  </select>
+  
+</mapper>

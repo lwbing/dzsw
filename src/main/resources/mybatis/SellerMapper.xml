@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lwb.mapper.SellerMapper">
+	<resultMap type="Seller" id="resultSeller">
+		<id column="id" property="id"/>
+		<result column="head_img" property="headImg"/>
+		<result column="seller_name" property="sellerName"/>
+		<result column="login_name" property="loginName"/>	
+		<result column="pwd" property="pwd"/>
+		<result column="tel" property="tel"/>
+		<result column="email" property="email"/>
+		<result column="status" property="status"/>
+		<result column="enable" property="enable"/>
+		<result column="create_time" property="createTime"/>
+	</resultMap>
+	<sql id="columns">
+		id,head_img,seller_name,login_name,tel,email,status,enable,create_time
+	</sql>
+    <select id="get" resultType="Seller" parameterType="int" >
+        select * from tv_seller where id = #{id}
+    </select>
+    <insert id="add" parameterType="Seller"> 
+    	INSERT INTO tv_seller (head_img,seller_name,login_name,tel,email,status,enable,create_time) 
+    	VALUES 
+    	(#{headImg},#{sellerName},#{loginName},#{pwd},#{tel},#{email},#{status},#{enable},#{createTime})
+    	<selectKey order="AFTER" keyProperty="id" resultType="java.lang.Integer"> SELECT @@IDENTITY as id </selectKey>
+    </insert>
+    
+    <update id="update" parameterType="Seller">
+		update tv_seller
+		<trim prefix="set" suffixOverrides=",">
+			<if test="headImg != null and headImg !=''">
+				head_img = #{headImg},
+			</if>	
+			<if test="sellerName != null and sellerName !=''">
+				seller_name = #{sellerName},
+			</if>
+			<if test="tel != null and tel !=''">
+				tel = #{tel},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="enable != null">
+				enable = #{enable},
+			</if>
+		</trim>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from tv_seller where id = #{id}
+	</delete>
+	
+	 <select id="getList" resultType="Seller" parameterType="map" >
+        select * from tv_seller 
+        <where>
+			<if test="_parameter.containsKey('loginName')">  
+	        	AND login_name = #{loginName})  
+	    	</if> 
+	    	<if test="_parameter.containsKey('tel')">  
+	        	AND tel = #{tel})  
+	    	</if> 
+	    	<if test="_parameter.containsKey('status')">  
+	        	AND status = #{status})  
+	    	</if> 
+	    	<if test="_parameter.containsKey('enable')">  
+	        	AND enable = #{enable})  
+	    	</if>
+		</where>
+		LIMIT #{start},#{end}
+    </select>
+    
+    <select id="count" parameterType="map" resultType="int">
+		select count(*) from tv_seller
+		<where>
+			<if test="_parameter.containsKey('loginName')">  
+	        	AND login_name = #{loginName})  
+	    	</if> 
+	    	<if test="_parameter.containsKey('tel')">  
+	        	AND tel = #{tel})  
+	    	</if> 
+	    	<if test="_parameter.containsKey('status')">  
+	        	AND status = #{status})  
+	    	</if> 
+	    	<if test="_parameter.containsKey('enable')">  
+	        	AND enable = #{enable})  
+	    	</if>
+		</where>
+	</select>
+    
+    <!-- 
+    <insert id="batchAdd" useGeneratedKeys="true" keyProperty="id">
+    	INSERT INTO city (name,state,country,isBgiCity,startDate) VALUES 
+    	<foreach item="item" collection="list" index="index" separator=",">
+    	 (#{item.name},#{item.state},#{item.country},#{item.isBgiCity},#{item.startDate})
+    	</foreach>
+    	
+    	
+    	<if test="_parameter.containsKey('msgType')">  
+	        AND msgType = #{msgType,jdbcType=VARCHAR})  
+	    </if>  
+	    <if test="_parameter.containsKey('event')">  
+	        AND event = #{event,jdbcType=VARCHAR})  
+	    </if>
+    </insert> -->
+
+</mapper>

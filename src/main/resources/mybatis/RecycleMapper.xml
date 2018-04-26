@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lwb.mapper.RecycleMapper" >
+  <resultMap id="baseMap" type="com.lwb.model.Recycle" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="BIGINT" />
+    <result column="flag" property="flag" jdbcType="SMALLINT" />
+    <result column="cxt" property="cxt" jdbcType="LONGVARCHAR" />
+  </resultMap>
+
+  <sql id="columns" >
+    id, user_id, create_time, flag,cxt
+  </sql>
+
+  <select id="get" resultMap="baseMap" parameterType="int" >
+    select 
+    <include refid="columns" />
+    from tv_recycle
+    where id = #{id}
+  </select>
+  <delete id="remove" parameterType="int" >
+    delete from tv_recycle
+    where id = #{id}
+  </delete>
+  <insert id="add" parameterType="com.lwb.model.Recycle" >
+    insert into tv_recycle (id, user_id, create_time, 
+      flag, cxt)
+    values (#{id}, #{userId}, #{createTime}, 
+      #{flag}, #{cxt})
+  </insert>
+
+   <sql id="where_caulce" >
+ 	<where> 
+	    <if test="userId > 0">
+	         user_id = #{userId}
+	    </if> 
+	    <if test="flag > 0">
+	        AND status = #{status}
+	    </if>
+	 </where>
+  </sql>
+  
+  <select id="count" parameterType="map" resultType="int">
+    select count(*) from tv_product
+    <if test="_parameter != null" >
+      <include refid="where_caulce" />
+    </if>
+  </select>
+
+  
+  <select id="getList" parameterType="map" resultMap="baseMap">
+  	select <include refid="columns" /> 
+  	from tv_product 
+  	<include refid="where_caulce" /> 
+  	order by create_time desc LIMIT #{start,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+  </select>
+  
+</mapper>

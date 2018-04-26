@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lwb.mapper.OrderMapper" >
+  <resultMap id="baseMap" type="com.lwb.model.Order" >
+    <id column="order_code" property="orderCode" />
+    <result column="product_name" property="productName" />
+    <result column="product_id" property="productId" />
+    <result column="num" property="num" />
+    <result column="custorm_id" property="custormId" />
+    <result column="user_id" property="userId" />
+    <result column="status" property="status" />
+    <result column="money" property="money" />
+    <result column="qcode" property="qcode"  />
+    <result column="is_validate" property="isValidate" />
+    <result column="remark" property="remark" />
+    <result column="create_time" property="createTime" />
+  </resultMap>
+ 
+  <sql id="colums" >
+    order_code, product_name, product_id, num, user_id, status, money, qcode, is_validate,custorm_id,remark,create_time
+  </sql>
+  
+  <select id="validateCode" resultMap="baseMap" parameterType="string">
+  	select 
+  	<include refid="colums" />
+  	from tv_order where qcode = #{qcode}
+  </select>
+  
+  <select id="get" resultMap="baseMap" parameterType="java.lang.String" >
+    select 
+    <include refid="colums" />
+    from tv_order
+    where order_code = #{orderCode,jdbcType=VARCHAR}
+  </select>
+  
+  <delete id="deleteById" parameterType="java.lang.String">
+    delete from tv_order
+    where order_code = #{orderCode,jdbcType=VARCHAR}
+  </delete>
+ 
+  <update id="setStatus" parameterType="map">
+  	update tv_order set status=#{status} where order_code=#{orderCode}
+  </update>
+  
+  <update id="setValidate" parameterType="map">
+  	update tv_order set is_validate=#{isValidate} where order_code=#{orderCode}
+  </update>
+ 
+ 
+ 
+  <insert id="add" parameterType="com.lwb.model.Order" >
+    insert into tv_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderCode != null" >
+        order_code,
+      </if>
+      <if test="productName != null" >
+        product_name,
+      </if>
+      <if test="productId > 0" >
+        product_id,
+      </if>
+      <if test="num > 0" >
+        num,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="status >= 0" >
+        status,
+      </if>
+      <if test="money >= 0" >
+        money,
+      </if>
+      <if test="qcode != null" >
+        qcode,
+      </if>
+      <if test="isValidate >= 0" >
+        is_validate,
+      </if>
+      <if test="createTime > 0" >
+        create_time,
+      </if>
+      <if test="custormId >0">
+      	custorm_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderCode != null" >
+        #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null" >
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="productId != null" >
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="num != null" >
+        #{num,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="money != null" >
+        #{money,jdbcType=REAL},
+      </if>
+      <if test="qcode != null" >
+        #{qcode,jdbcType=VARCHAR},
+      </if>
+      <if test="isValidate != null" >
+        #{isValidate,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+ 
+ <sql id="where_caulce" >
+ 	<where> 
+	    <if test="userId != null">
+	         user_id = #{userId}
+	    </if> 
+	    <if test="status >= 0">
+	        AND status = #{status}
+	    </if>
+	    <if test="custormId > 0">
+	        AND custorm_id = #{custormId}
+	    </if>
+	    <if test="isValidate >= 0">
+	    	AND is_validate = #{isValidate}
+	    </if>
+	 </where>
+  </sql>
+ 
+  <select id="count" parameterType="map" resultType="java.lang.Integer" >
+    select count(*) from tv_order 
+    <include refid="where_caulce" />
+  </select>
+
+  <select id="getList" parameterType="map" resultMap="baseMap">
+  	select 
+  	<include refid="colums" />
+    from tv_order <include refid="where_caulce" /> 
+    order by create_time desc LIMIT #{start,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+  </select>
+</mapper>

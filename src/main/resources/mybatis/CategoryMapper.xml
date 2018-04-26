@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lwb.mapper.CategoryMapper">
+	<resultMap type="Category" id="resultCategory">
+		<id column="id" property="id"/>
+		<result column="title" property="title"/>
+		<result column="topic" property="topic"/>
+		<result column="pid" property="pid"/>
+		<result column="icon" property="icon"/>
+		<result column="data" property="data"/>
+		<result column="remark" property="remark"/>
+		<result column="create_time" property="createTime"/>
+	</resultMap>
+	<sql id="columns">
+		id,title,topic,pid,icon,create_time,remark
+	</sql>
+    <select id="get" resultType="Category" parameterType="int" >
+        select 
+	    <include refid="columns" /> 
+	    from tv_category
+	    where id = #{id}
+	    </select>
+    <insert id="add" parameterType="Category"> 
+    	INSERT INTO tv_category (title,topic,pid,icon,create_time,remark) VALUES (#{title},#{topic},#{pid},#{icon},#{createTime},#{remark})
+    </insert>
+
+    <update id="setIcon" parameterType="map">
+         UPDATE tv_category SET icon=#{icon} WHERE id =#{id}
+    </update>
+    
+    <select id="getList" parameterType="map" resultMap="resultCategory">
+        select  <include refid="columns" /> from  tv_category 
+         <where>
+            <if test=" topic >0">
+                 AND topic = #{topic}
+            </if>
+        </where>
+        order by createtime desc LIMIT 0,20
+    </select>
+    
+    <select id="getList" parameterType="map" resultType="int">
+        select  count(*) from  tv_category 
+         <where>
+            <if test=" topic >0">
+                 AND topic = #{topic}
+            </if>
+        </where>
+    </select>
+    
+    <update id="remove" parameterType="int">
+        DELETE FROM tv_category WHERE id = #{id}
+    </update>
+</mapper>

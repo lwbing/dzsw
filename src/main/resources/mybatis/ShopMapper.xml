@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lwb.mapper.ShopMapper">
+	<resultMap type="Shop" id="resultShop">
+		<id column="id" property="id"/>
+		<result column="shop_name" property="shopName"/>
+		<result column="logo" property="logo"/>
+		<result column="seller_id" property="sellerId"/>	
+		<result column="seller_name" property="sellerName"/>
+		<result column="level" property="level"/>
+		<result column="shop_type" property="shopType"/>
+		<result column="enable" property="enable"/>
+		<result column="sorts" property="sorts"/>
+		<result column="end_time" property="endTime"/>
+		<result column="create_time" property="createTime"/>
+	</resultMap>
+	<sql id="columns">
+		id,shop_name,logo,seller_id,seller_name,level,shop_type,enable,sorts,end_time,create_time
+	</sql>
+    <select id="get" resultType="Shop" parameterType="int" >
+        select * from tv_shop where id = #{id}
+    </select>
+    <insert id="add" parameterType="Shop"> 
+    	INSERT INTO tv_shop (shop_name,logo,login_name,seller_id,seller_name,level,shop_type,enable,sorts,end_time,create_time) 
+    	VALUES 
+    	(#{shopName},#{logo},#{sellerId},#{sellerName},#{level},#{shopType},#{enable},#{sorts},#{endTime},#{createTime})
+    	<selectKey order="AFTER" keyProperty="id" resultType="java.lang.Integer"> SELECT @@IDENTITY as id </selectKey>
+    </insert>
+    
+    <delete id="remove">
+		delete from tv_shop where id = #{id}
+	</delete>
+	
+	<update id="update" parameterType="ShareInfo">
+		update tv_shop
+		<trim prefix="set" suffixOverrides=",">
+			<if test="shopName != null and url !=''">
+				shop_name = #{shopName},
+			</if>	
+			<if test="logo != null and url !=''">
+				logo = #{logo},
+			</if>	
+			<if test="shopName != null and url !=''">
+				shop_name = #{shopName},
+			</if>	
+			<if test="level !=null">
+				level = #{level},
+			</if>
+			<if test="shopType !=null">
+				shop_type = #{shopType},
+			</if>
+			<if test="enable !=null">
+				enable = #{enable},
+			</if>
+			<if test="sorts>= 0">
+				sorts = #{sorts},
+			</if>
+		</trim>
+		where id = #{id}
+	</update>
+    
+    <select id="getList" resultType="resultShop" parameterType="map" >
+        select * from tv_shop 
+        <where>
+			<if test="_parameter.containsKey('sellerId')">  
+	        	AND seller_id = #{disId})  
+	    	</if> 
+	    	<if test="_parameter.containsKey('level')">  
+	        	AND level = #{level})  
+	    	</if> 
+	    	
+	    	<if test="_parameter.containsKey('shopType')">  
+	        	AND shop_type = #{shopType})  
+	    	</if>
+	    	<if test="_parameter.containsKey('enable')">  
+	        	AND enable = #{enable})  
+	    	</if>
+		</where>
+		LIMIT #{start},#{end}
+    </select>
+    
+    <select id="count" parameterType="map" resultType="int">
+		select count(*) from tv_shop
+		<where>
+			<if test="_parameter.containsKey('sellerId')">  
+	        	AND seller_id = #{disId})  
+	    	</if> 
+	    	<if test="_parameter.containsKey('level')">  
+	        	AND level = #{level})  
+	    	</if> 
+	    	
+	    	<if test="_parameter.containsKey('shopType')">  
+	        	AND shop_type = #{shopType})  
+	    	</if>
+	    	<if test="_parameter.containsKey('enable')">  
+	        	AND enable = #{enable})  
+	    	</if>
+		</where>
+	</select>
+
+</mapper>

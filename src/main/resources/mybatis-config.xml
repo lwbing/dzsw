@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <typeAliases>
+        <package name="com.lwb.model"/>
+    </typeAliases>
+    <mappers>
+        <mapper resource="mybatis/UserInfoMapper.xml"/>
+        <mapper resource="mybatis/ProductMapper.xml"/>
+        <mapper resource="mybatis/RecycleMapper.xml"/>
+        <mapper resource="mybatis/TradeRecordMapper.xml"/>
+        <mapper resource="mybatis/OrderMapper.xml"/>
+    </mappers>
+</configuration>

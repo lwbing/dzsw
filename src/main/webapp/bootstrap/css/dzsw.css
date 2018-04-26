@@ -1,0 +1,22 @@
+div,ul,li{
+	margin: 0px;padding: 0px;
+}
+body{
+	background-color: #ffffff;font-family:"Microsoft YaHei",Arial,Helvetica,sans-serif,"ËÎÌו";
+}
+.title_head{
+	background-color: #ff9c00; height: 50px;font-size: 18px;
+}
+.white1{
+	background-color: #ffffff;
+}
+.inline_block{
+	display: inline-block;height: 20px;margin-left: 10px;color: #ff9c00;overflow: hidden;padding-bottom: 2px;
+}
+.line_li{
+	display: inline-block;height: 20px;width: 3px;overflow: hidden;border-left:4px solid #ff9c00;
+}
+
+.pline{
+	border-bottom: 1px solid #dfdfdf;padding: 10px;
+}

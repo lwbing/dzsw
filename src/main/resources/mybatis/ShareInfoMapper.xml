@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lwb.mapper.ShareInfoMapper">
+	<resultMap type="ShareInfo" id="resultShareInfo">
+		<id column="id" property="id"/>
+		<result column="url" property="url"/>
+		<result column="dis_id" property="disId"/>
+		<result column="product_id" property="productId"/>	
+		<result column="create_time" property="createTime"/>
+	</resultMap>
+	<sql id="columns">
+		id,url,dis_id,product_id,create_time
+	</sql>
+    <select id="get" resultType="ShareInfo" parameterType="int" >
+        select * from tv_shareinfo where id = #{id}
+    </select>
+    <insert id="add" parameterType="ShareInfo"> 
+    	INSERT INTO tv_shareinfo (url,dis_id,product_id,create_time) 
+    	VALUES 
+    	(#{url},#{disId},#{productId},#{data},#{createTime})
+    	<selectKey order="AFTER" keyProperty="id" resultType="java.lang.Integer"> SELECT @@IDENTITY as id </selectKey>
+    </insert>
+    
+    <delete id="remove">
+		delete from tv_shareinfo where id = #{id}
+	</delete>
+	
+	<update id="update" parameterType="ShareInfo">
+		update tv_shareinfo
+		<trim prefix="set" suffixOverrides=",">
+			<if test="url != null and url !=''">
+				url = #{url},
+			</if>	
+			<if test="disId > 0">
+				dis_id = #{dis_id},
+			</if>
+			<if test="productId > 0">
+				product_id = #{productId},
+			</if>
+		</trim>
+		where id = #{id}
+	</update>
+    
+    <select id="getList" resultType="resultShareInfo" parameterType="map" >
+        select * from tv_shareinfo 
+        <where>
+			<if test="_parameter.containsKey('disId')">  
+	        	AND dis_id = #{disId})  
+	    	</if> 
+	    	<if test="_parameter.containsKey('productId')">  
+	        	AND product_id = #{productId})  
+	    	</if> 
+		</where>
+		LIMIT #{start},#{end}
+    </select>
+    
+    <select id="count" parameterType="map" resultType="int">
+		select count(*) from tv_shareinfo
+		<where>
+			<if test="_parameter.containsKey('disId')">  
+	        	AND login_name = #{loginName})  
+	    	</if> 
+	    	<if test="_parameter.containsKey('productId')">  
+	        	AND tel = #{tel})  
+	    	</if> 
+		</where>
+	</select>
+
+</mapper>

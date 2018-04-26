@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lwb.mapper.ShopingCarMapper">
+	<resultMap type="ShopingCar" id="resultShopingCar">
+		<id column="id" property="id"/>
+		<result column="product_name" property="productName"/>
+		<result column="product_id" property="productId"/>
+		<result column="num" property="num"/>	
+		<result column="product_img" property="productImg"/>
+		<result column="price" property="price"/>
+		<result column="user_id" property="userId"/>
+		<result column="status" property="status"/>
+		<result column="custorm_id" property="custormId"/>
+		<result column="remark" property="remark"/>
+		<result column="create_time" property="createTime"/>
+	</resultMap>
+	<sql id="columns">
+		id,product_name,product_id,num,product_img,price,user_id,status,custorm_id,remark,create_time
+	</sql>
+    <select id="get" resultType="ShopingCar" parameterType="int" >
+        select * from tv_shoping_car where id = #{id}
+    </select>
+    <insert id="add" parameterType="ShopingCar"> 
+    	INSERT INTO tv_shoping_car (product_name,product_id,num,product_img,price,user_id,status,custorm_id,remark,create_time) 
+    	VALUES 
+    	(#{productName},#{productId},#{num},#{productImg},#{price},#{userId},#{status},#{custormId},#{remark},#{createTime})
+    	<selectKey order="AFTER" keyProperty="id" resultType="java.lang.Integer"> SELECT @@IDENTITY as id </selectKey>
+    </insert>
+    
+    <delete id="remove"  parameterType="int">
+    	delete from tv_shoping_car where id =#{id}
+    </delete>
+    
+    <update id="update" parameterType="map">
+		update tv_shoping_car
+		<trim prefix="set" suffixOverrides=",">
+			<if test="_parameter.containsKey('num')">  
+				num = #{num},
+			</if>	
+			<if test="_parameter.containsKey('status')">  
+				status = #{status},
+			</if>
+		</trim>
+		where id = #{id}
+	</update>
+    
+     <select id="getList" resultType="resultShopingCar" parameterType="map" >
+        select * from tv_shoping_car 
+        <where>
+			<if test="_parameter.containsKey('productId')">  
+	        	AND product_id = #{productId})  
+	    	</if> 
+	    	<if test="_parameter.containsKey('userId')">  
+	        	AND user_id = #{userId})  
+	    	</if> 
+	    	<if test="_parameter.containsKey('custormId')">  
+	        	AND custorm_id = #{custormId})  
+	    	</if> 
+	    	<if test="_parameter.containsKey('status')">  
+	        	AND status = #{status})  
+	    	</if> 
+		</where>
+		LIMIT #{start},#{end}
+    </select>
+    
+    <select id="count" parameterType="map" resultType="int">
+		select count(*) from tv_shoping_car
+		 <where>
+			<if test="_parameter.containsKey('productId')">  
+	        	AND product_id = #{productId})  
+	    	</if> 
+	    	<if test="_parameter.containsKey('userId')">  
+	        	AND user_id = #{userId})  
+	    	</if> 
+	    	<if test="_parameter.containsKey('custormId')">  
+	        	AND custorm_id = #{custormId})  
+	    	</if> 
+	    	<if test="_parameter.containsKey('status')">  
+	        	AND status = #{status})  
+	    	</if> 
+		</where>
+	</select>
+
+</mapper>
