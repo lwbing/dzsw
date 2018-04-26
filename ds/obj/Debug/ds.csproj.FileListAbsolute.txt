@@ -1,0 +1,5 @@
+E:\lwb\html\ds\ds\bin\ds.dll
+E:\lwb\html\ds\ds\bin\ds.pdb
+E:\lwb\html\ds\ds\obj\Debug\ds.dll
+E:\lwb\html\ds\ds\obj\Debug\ds.pdb
+E:\lwb\html\ds\ds\obj\Debug\ds.csprojResolveAssemblyReference.cache
