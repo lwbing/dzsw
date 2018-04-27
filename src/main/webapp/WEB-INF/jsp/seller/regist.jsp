@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
@@ -10,11 +9,6 @@
 <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" />
 <script src="/bootstrap/js/jquery.min.js"></script>
 <script src="/bootstrap/js/bootstrap.min.js"></script>
-<!-- 
-<link rel="stylesheet"
-	href="https://apps.bdimg.com/libs/jquerymobile/1.4.5/jquery.mobile-1.4.5.min.css">
-<script src="https://apps.bdimg.com/libs/jquery/1.10.2/jquery.min.js"></script>
-<script src="https://apps.bdimg.com/libs/jquerymobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>-->
 <link rel="stylesheet" href="/bootstrap/css/dzsw.css"></link>
 </head>
 <body>
