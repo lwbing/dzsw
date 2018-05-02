@@ -60,6 +60,7 @@ public class SellerController
 		return ReturnMap.result(0, "fail");
 	}
 	
+	
 	/**
 	 * 商家注册页面
 	 */
@@ -68,6 +69,26 @@ public class SellerController
 	{
 		return "seller/regist";
 	}
+	
+	/**
+	 * 创建店铺
+	 * @return
+	 */
+	@RequestMapping("createShop")
+	public String createShop()
+	{
+		return "seller/createShop";
+	}
+	
+	/**
+	 * 我的店铺
+	 */
+	@RequestMapping("myShop")
+	public String myShop()
+	{
+		return "seller/myShop";
+	}
+	
 	
 	/**
 	 * 注册接口
@@ -121,9 +142,9 @@ public class SellerController
 	@RequestMapping(value = "login")
 	public String logins(HttpServletRequest request)
 	{
-		HttpSession session = request.getSession();
-		String rm = RandomStringUtils.randomAlphanumeric(4);
-		RedisUtil.setex(session.getId(), 80, rm);
+//		HttpSession session = request.getSession();
+//		String rm = RandomStringUtils.randomAlphanumeric(4);
+//		RedisUtil.setex(session.getId(), 80, rm);
 		return "seller/login";
 	}
 	
@@ -156,5 +177,14 @@ public class SellerController
 			}
 		}
 		return ReturnMap.result(0, "fail");
+	}
+	
+	/**
+	 * 用户管理首页
+	 */
+	@RequestMapping(value = "manager")
+	public String manager(HttpServletRequest request)
+	{
+		return "seller/manager";
 	}
 }
