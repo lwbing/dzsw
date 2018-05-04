@@ -3,13 +3,11 @@ package com.lwb.controller;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +22,7 @@ import com.lwb.model.Order;
 import com.lwb.model.UserInfo;
 import com.lwb.model.request.Login;
 import com.lwb.service.UserInfoService;
-import com.lwb.util.ReturnMap;
+import com.lwb.util.SessionUtil;
 
 @Controller
 @RequestMapping("userinfo/")
@@ -33,60 +31,69 @@ public class UserInfoController
 	@Autowired
 	private UserInfoService userInfoService;
 	
+	@Autowired
+	private HttpServletRequest request;
 	
+	/**
+	 * 普通用户登录
+	 * @param request
+	 * @param httpSession
+	 * @return
+	 */
 	@RequestMapping(value = "signIn")
-	public String signIn(HttpServletRequest request,HttpSession httpSession) 
+	public String signIn() 
 	{
-	    httpSession.setAttribute("crunt_coms",10);
+	    //httpSession.setAttribute("crunt_coms",10);
 	    return "userinfo/signIn";
 	}
 	
-	@RequestMapping(value="signIn",method = RequestMethod.POST)
-	public String nomalLogin(Login model)
-	{
-		UserInfo info = userInfoService.signIn(model);
-		if (info.getUserType() ==0) {
-			
-		}
-		return "";
-	}
 	/**
-	 * 商家门票管理首页
+	 * 普通用户提交登陆信息
+	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value="cindex")
-	public String cindex()
+	@RequestMapping(value="signIn",method = RequestMethod.POST)
+	public String nomalLogin(Login model,Model data)
 	{
-		return "userinfo/cindex";
+		String msg ="";
+		if (StringUtils.isEmpty(model.getUserPwd()) || StringUtils.isEmpty(model.getUserName())) {
+			msg="用户名或密码不能为空";
+		}
+		UserInfo info = userInfoService.signIn(model);
+		if (info == null) {
+			msg="用户名或密码错误";
+			data.addAttribute("msg", msg);
+			return "userinfo/signIn";
+		}else {
+			//系统管理员
+			JSONObject object = new JSONObject();
+			object.put("userId", info.getUserId());
+			object.put("headImg", info.getHeadImg());
+			object.put("nickName", info.getNickName());
+			object.put("userType", info.getUserType());
+			if (info.getUserType() ==1) {
+				SessionUtil.setAdmin(request, object.toJSONString());
+				return "redirect:/admin/main";
+			}
+			//商户管理
+			else if (info.getUserType() == 2) {
+				SessionUtil.setSellerId(request, object.toJSONString());
+				return "redirect:/seller/index";
+			}else {
+				//普通用户个人中心
+				SessionUtil.setUserId(request, object.toJSONString());
+				return "redirect:/userinfo/userCenter";
+			}
+		}
 	}
 	
-	@RequestMapping(value="selectCode",method=RequestMethod.POST)
-	@ResponseBody
-	public ModelAndView select(HttpServletRequest request,ModelAndView model)
+	/**
+	 * 用户信息注册
+	 * @return
+	 */
+	@RequestMapping(value="regist")
+	public String regist()
 	{
-		model.setViewName("/userinfo/cindex");		
-		JSONObject object = new JSONObject();
-		object.put("orderCode", "201803211704501244657");
-		object.put("productId", 10);
-		object.put("productName", "花之城旅游景区门票");
-		object.put("createTime", tranDate(System.currentTimeMillis()));
-		object.put("status", "已支付");
-		object.put("isValidate", "未验证");
-		object.put("money", 50.0);
-		object.put("mobileNumber","13619625274");
-		object.put("num", 2);
-		List<JSONObject> list = new ArrayList<JSONObject>();
-		list.add(object);
-		model.addObject("order",list);
-		return model;  
-	}
-	
-	
-	private String tranDate(long date)
-	{
-		Date dt = new Date(date);
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		return format.format(dt);
-		//数据操作
+		return "userinfo/regist";
 	}
 }

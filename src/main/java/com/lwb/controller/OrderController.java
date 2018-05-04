@@ -27,6 +27,9 @@ public class OrderController
 	@Autowired
 	private OrderService orderService;
 	
+	@Autowired
+	private HttpServletRequest request;
+	
 	/**
 	 * 商家门票管理首页
 	 * @return
@@ -39,7 +42,7 @@ public class OrderController
 	
 	@RequestMapping(value="selectCode",method=RequestMethod.POST)
 	@ResponseBody
-	public String select(HttpServletRequest request,Model model)
+	public String select(Model model)
 	{
 
 		String qcode = request.getParameter("qcode");

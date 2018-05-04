@@ -29,52 +29,23 @@
 	</div>
 	<div class="side">
 		<div class="sideMenu" style="margin: 0 auto">
-			<h3>导航菜单</h3>
+			<h3><a href="main2.html" target="right" class="color307fb1">快速验票</a></h3>
 			<ul>
-				<li><a href="main2.html" target="right" class="color307fb1">main2</a></li>
-				<li>导航菜单</li>
-				<li>导航菜单</li>
-				<li class="on">导航菜单</li>
-				<li>导航菜单</li>
 			</ul>
-			<h3>导航菜单</h3>
+			<h3>商品管理</h3>
 			<ul>
-				<li>导航菜单</li>
-				<li>导航菜单</li>
-				<li>导航菜单</li>
-				<li>导航菜单</li>
-				<li>导航菜单</li>
+				<li><a href="main2.html" target="right" class="color307fb1">发布商品</a></li>
+				<li><a href="main2.html" target="right" class="color307fb1">审核中的商品</a></li>
+				<li><a href="main2.html" target="right" class="color307fb1">已发布的商品</a></li>
 			</ul>
-			<h3>导航菜单</h3>
+			<h3>订单管理</h3>
 			<ul>
-				<li>导航菜单</li>
-				<li>导航菜单</li>
-				<li>导航菜单</li>
-				<li>导航菜单</li>
+				<li><a href="main2.html" target="right" class="color307fb1">待处理订单</a></li>
+				<li><a href="main2.html" target="right" class="color307fb1">已处理订单</a></li>
+				<li><a href="main2.html" target="right" class="color307fb1">订单查询</a></li>
 			</ul>
+			<h3><a href="main2.html" target="right" class="color307fb1">订单报表</a></h3>
 			<h3>导航菜单</h3>
-			<ul>
-				<li>导航菜单</li>
-				<li>导航菜单</li>
-				<li>导航菜单</li>
-				<li class="on">导航菜单</li>
-				<li>导航菜单</li>
-			</ul>
-			<h3>导航菜单</h3>
-			<ul>
-				<li>导航菜单</li>
-				<li>导航菜单</li>
-				<li>导航菜单</li>
-				<li>导航菜单</li>
-				<li>导航菜单</li>
-			</ul>
-			<h3>导航菜单</h3>
-			<ul>
-				<li>导航菜单</li>
-				<li>导航菜单</li>
-				<li>导航菜单</li>
-				<li>导航菜单</li>
-			</ul>
 		</div>
 	</div>
 </body>

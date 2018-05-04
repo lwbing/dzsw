@@ -3,9 +3,12 @@ package com.lwb.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -19,6 +22,7 @@ import com.lwb.service.CategoryService;
 import com.lwb.service.ProductService;
 import com.lwb.util.DateUtil;
 import com.lwb.util.ReturnMap;
+import com.lwb.util.SessionUtil;
 import com.lwb.util.StringComm;
 
 @Controller
@@ -29,6 +33,9 @@ public class ProductController
 	
 	@Autowired
 	private CategoryService categoryService;
+	
+	@Autowired
+	private HttpServletRequest request;
 	
 	@RequestMapping("/product/index")
 	public String index()
@@ -128,5 +135,60 @@ public class ProductController
 		pt.put("notice",model.getNotice());
 		pt.put("descrpt",model.getDescrpt());
 		return ReturnMap.result(1, "ok", pt);
+	}
+	
+	@RequestMapping("/product/add")
+	@ResponseBody
+	public Object add(@RequestBody Product model)
+	{
+		JSONObject object = SessionUtil.getSellerId(request);
+		if (object.containsKey("userId")) {
+			model.setStatus(1);
+			int result = productService.add(model);
+			if (result>0) {
+				return ReturnMap.result(1, "success");
+			}
+		}
+		return ReturnMap.result(0, "添加失败！");
+	}
+	
+	/**
+	 * 用户产品审核
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/product/setStatus")
+	@ResponseBody
+	public Object setStatus(@RequestBody Product model)
+	{
+		JSONObject object = SessionUtil.getAdmin(request);
+		if (object.containsKey("userId")) {
+			model.setStatus(1);
+			int result = productService.setStatus(model.getId(), model.getStatus());
+			if (result>0) {
+				return ReturnMap.result(1, "success");
+			}
+		}
+		return ReturnMap.result(0, "添加失败！");
+	}
+	
+	/**
+	 * 删除用户未审核通过的产品
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/product/remove/{id}")
+	@ResponseBody
+	public Object remove(@PathVariable("id") int id)
+	{
+		JSONObject object = SessionUtil.getSellerId(request);
+		if (object.containsKey("userId")) 
+		{
+			int result = productService.delete(id);
+			if (result>0) {
+				return ReturnMap.result(1, "success");
+			}
+		}
+		return ReturnMap.result(0, "删除失败！");
 	}
 }

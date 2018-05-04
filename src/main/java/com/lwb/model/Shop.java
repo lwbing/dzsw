@@ -20,13 +20,15 @@ public class Shop
 	
 	private Integer shopType;//店铺分类：生鲜植物，美食/精品服装/旅游景区
 	
-	private Integer enable;//是否启用：0是关闭，1 是启用
+	private Integer enable;//是否启用：1 是启用   2是关闭，3是待审核
 	
 	private long createTime;//创建日期
 	
 	private long endTime;//到期日期
 	
 	private int sorts;//排序 ，越低越靠前
+	
+	private String data;//其他json数据
 
 	public int getId() {
 		return id;
@@ -115,6 +117,12 @@ public class Shop
 	public void setSorts(int sorts) {
 		this.sorts = sorts;
 	}
-	
-	
+
+	public String getData() {
+		return data;
+	}
+
+	public void setData(String data) {
+		this.data = data;
+	}
 }

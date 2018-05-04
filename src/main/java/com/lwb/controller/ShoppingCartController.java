@@ -46,10 +46,9 @@ public class ShoppingCartController
 		if (data.getNum()<=0) {
 			return ReturnMap.result(0, "数量不能为零！");
 		}
-		int userId = SessionUtil.getUserId(request);
-		data.setUserId(userId);
+		JSONObject userId = SessionUtil.getUserId(request);
+		data.setUserId(userId.getIntValue("userId"));
 		int result = carService.add(data);
-		data.setUserId(userId);
 		if (result>0) {
 			return ReturnMap.result(1, "添加成功！");
 		}else {
@@ -90,7 +89,8 @@ public class ShoppingCartController
 	public Object remove(@PathVariable("id") int id)
 	{
 		ShopingCar model = carService.get(id);
-		int userId = SessionUtil.getUserId(request);
+		JSONObject object = SessionUtil.getUserId(request);
+		int userId = object.getIntValue("userId");
 		if (model.getUserId() == userId) {
 			int result = carService.remove(id);
 			if (result>0) {
@@ -109,7 +109,9 @@ public class ShoppingCartController
 	public Object list(@PathVariable("id") int id)
 	{
 		ShoppCarParam param = new ShoppCarParam();
-		param.setUserId(SessionUtil.getUserId(request));
+		JSONObject sobject = SessionUtil.getUserId(request);
+		int userId = sobject.getIntValue("userId");
+		param.setUserId(userId);
 		param.setStatus(0);
 		List<ShopingCar> list = carService.getList(param);
 		List<JSONObject> objects = new ArrayList<JSONObject>();
