@@ -49,7 +49,7 @@ public class UserInfo
 	 */
 	private String sex;
 	/**
-	 * 用户类型：平台用户是1，普通用户是0，商户用户是2
+	 * 用户类型：平台用户是1，普通用户是0，商户用户是2,3是超级管理员
 	 */
 	private int userType;
 	/**
