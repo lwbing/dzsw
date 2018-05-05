@@ -123,7 +123,7 @@ public class UserInfoController
 		if (result>0) {
 			return ReturnMap.result(1, "注册成功！");
 		}
-		return "userinfo/regist";
+		return ReturnMap.result(0, "注册失败！");
 	}
 	/**
 	 * 成为商户
@@ -154,7 +154,7 @@ public class UserInfoController
 		if (result>0) {
 			return ReturnMap.result(1, "注册成功！");
 		}
-		return "userinfo/regist";
+		return ReturnMap.result(0, "注册失败！");
 	}
 
 }
